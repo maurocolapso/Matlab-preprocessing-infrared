@@ -10,12 +10,26 @@ z = size(MZ,1);
 
 dinfo = dir ('*.dpt'); %read files in current directory with .dpt extension
 files = {dinfo.name}; %create a cell array with the names of the files in the directory
-a = length(files); %number of files to use in the for loop
+a = length(files); %number of files to use in the for loop and number of files imported
 Y = zeros(z, a); %preallocation of Y
 
 for i = 1:a %loop extract every second column of each file and append into Y variable
     Y(:,i) = dlmread(files{i},'\t',0,1);
 end
+
+% number of spectras imported
+formatSpec = 'Number of spectra files imported: %d',...);
+sprintf(formatSpec,a)
+
+% number of data points and wavenumber range
+M = round(min(MZ));
+N = round(max(MZ));
+reso =  round((N-M)/z)
+
+sprintf(['Number of files imported: %d.\nEach spectra file has '... 
+    '%d data points.\nThe wavenumber '...
+    'range is from %d cm-1 to %d cm-1.\nThe resolution is %d'],a,z,M,N,reso)
+
 
 % Check if spectra has values of 6
 [~,col] = find(Y == 6);
